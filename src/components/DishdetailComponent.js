@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Card,CardBody,CardImg,CardTitle,CardText,Breadcrumb,BreadcrumbItem,Modal,ModalHeader,ModalBody,Label,Row,Col,Button} from 'reactstrap';
 import { Control,LocalForm,Errors} from 'react-redux-form';
 import {Link} from 'react-router-dom';
+import { Loading } from './loadingComponent';
 
 
 
@@ -17,7 +18,10 @@ import {Link} from 'react-router-dom';
 
             this.state={
               
-                isModalOpen:false
+                isModalOpen:false,
+                dishId: '',
+                addComment: ''
+
             };
 
       
@@ -34,8 +38,8 @@ import {Link} from 'react-router-dom';
         }
 
         handleSubmit(values){
-            console.log("Current State is:"+ JSON.stringify(values) );
-            alert("Current State is:"+ JSON.stringify(values))
+           this.toggleModal();
+           this.props.addComment(this.props.dishId,values.rating, values.author, values.comment);
     
           
         }
@@ -152,7 +156,7 @@ import {Link} from 'react-router-dom';
      
     
 
-    function RenderComment({comments ,postComment,dishId}){
+    function RenderComment({comments ,addComment,dishId}){
         if(comments != null){
             return(
          
@@ -169,7 +173,7 @@ import {Link} from 'react-router-dom';
                          );
                     }) }
                     </ul> 
-                    <CommentForm dishId={dishId} postComment={postComment} />
+                    <CommentForm dishId={dishId} addComment={addComment} />
               </div>
       
             );
@@ -187,7 +191,25 @@ import {Link} from 'react-router-dom';
     
   
     const DishDetail = (props) => { 
-       if (props.dish != null){
+        if (props.isLoading){
+            return(
+                <div className="container">
+                    <div className="row">
+                        <Loading />
+                    </div>
+                </div>
+            );
+        }
+        else if(props.errMess){
+            return(
+            <div className="container">
+            <div className="row">
+                <h4>{props.errMess}</h4>
+            </div>
+        </div>
+        );
+        }
+       else if(props.dish != null){
         return ( 
             <div className="container">
                 <div className="row">
@@ -204,9 +226,9 @@ import {Link} from 'react-router-dom';
                 <RenderDish dish ={props.dish} />
                 
                 <RenderComment
-                 comments={props.comments}
-                 postComment={props.postComment}
-                 dishId = {props.dishId}
+                 comments={props.comments}               
+                 dishId = {props.dish.id}
+                 addComment = {props.addComment}
                  />
                    
                 </div>
