@@ -20,8 +20,7 @@ import {baseUrl} from '../shared/baseUrl';
             this.state={
               
                 isModalOpen:false,
-                dishId: '',
-                addComment: ''
+               
 
             };
 
@@ -40,7 +39,7 @@ import {baseUrl} from '../shared/baseUrl';
 
         handleSubmit(values){
            this.toggleModal();
-           this.props.addComment(this.props.dishId,values.rating, values.author, values.comment);
+           this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
     
           
         }
@@ -157,7 +156,7 @@ import {baseUrl} from '../shared/baseUrl';
      
     
 
-    function RenderComment({comments ,addComment,dishId}){
+    function RenderComment({comments ,postComment,dishId}){
         if(comments != null){
             return(
          
@@ -174,7 +173,7 @@ import {baseUrl} from '../shared/baseUrl';
                          );
                     }) }
                     </ul> 
-                    <CommentForm dishId={dishId} addComment={addComment} />
+                    <CommentForm dishId={dishId} postComment={postComment} />
               </div>
       
             );
@@ -229,7 +228,7 @@ import {baseUrl} from '../shared/baseUrl';
                 <RenderComment
                  comments={props.comments}               
                  dishId = {props.dish.id}
-                 addComment = {props.addComment}
+                 postComment = {props.postComment}
                  />
                    
                 </div>
